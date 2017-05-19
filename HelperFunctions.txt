@@ -1,0 +1,65 @@
+ext_list = {}
+path = "/Users/family/Pictures"
+
+for root, dirs, files in os.walk(path):
+	for file in files:
+		ext = os.path.splitext(file)[1]
+		if not ext in ext_list:
+			ext_list[ext] = 1
+		else:
+			ext_list[ext] += 1
+
+print(ext_list)
+
+
+
+##
+# Calculate the disk space (in bytes) taken by different 
+# file extensions from $ext_to_investigate located in $path
+##
+
+import os
+import csv
+from os.path import join, getsize
+import math
+
+ext_list = {}
+path = "/Users/family/Pictures"
+ext_to_investigate = ['.lrprev','.lrmprev','.aae']
+
+for root, dirs, files in os.walk(path):
+    print("directory",root)
+    for file in files:
+        ext = os.path.splitext(file)[1]
+        filePath = os.path.join(root,file)
+        fileSize = getsize(filePath)
+        
+        if ext in ext_to_investigate:
+            if not ext.lower() in ext_list:
+                ext_list[ext] = (1,fileSize)
+            else:
+                tuple = ext_list[ext]
+                ext_list[ext] = tuple[0]+1, tuple[1]+fileSize
+print(ext_list)
+
+
+# extensions = ['.dng','.jpeg','.jpg']
+# path = "/Users/family/Pictures/2017/04 April/Wes"
+# for root, dirs, files in os.walk(path):
+    # # filter out non-image files
+    # images = list([os.path.join(root,x) for x in files if os.path.splitext(os.path.join(root,x))[1].lower() in imageExtensions])
+    # sizeOfImages = readable_size(sum(getsize(image) for image in images))
+    #
+    # # filter out non-video files
+    # videos = list([os.path.join(root,x) for x in files if os.path.splitext(os.path.join(root,x))[1].lower() in videoExtensions])
+    # sizeOfVideos = readable_size(sum(getsize(video) for video in videos))
+    #
+    # # size of all non-image, non-video files
+    # otherFiles = list([os.path.join(root,x) for x in files if os.path.splitext(os.path.join(root,x))[1].lower() not in (imageExtensions or videoExtensions)])
+    # sizeOfOther = readable_size(sum(getsize(image) for image in images))
+
+    # # filter out non-image files
+    # images = list([os.path.join(root,x) for x in files if os.path.splitext(os.path.join(root,x))[1].lower() in extensions])
+    # totalsize = sum(getsize(image) for image in images)
+    # print("images",images)
+
