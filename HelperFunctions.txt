@@ -48,15 +48,15 @@ print(ext_list)
 # for root, dirs, files in os.walk(path):
     # # filter out non-image files
     # images = list([os.path.join(root,x) for x in files if os.path.splitext(os.path.join(root,x))[1].lower() in imageExtensions])
-    # sizeOfImages = readable_size(sum(getsize(image) for image in images))
+    # sizeOfImages = get_readable_size(sum(getsize(image) for image in images))
     #
     # # filter out non-video files
     # videos = list([os.path.join(root,x) for x in files if os.path.splitext(os.path.join(root,x))[1].lower() in videoExtensions])
-    # sizeOfVideos = readable_size(sum(getsize(video) for video in videos))
+    # sizeOfVideos = get_readable_size(sum(getsize(video) for video in videos))
     #
     # # size of all non-image, non-video files
     # otherFiles = list([os.path.join(root,x) for x in files if os.path.splitext(os.path.join(root,x))[1].lower() not in (imageExtensions or videoExtensions)])
-    # sizeOfOther = readable_size(sum(getsize(image) for image in images))
+    # sizeOfOther = get_readable_size(sum(getsize(image) for image in images))
 
     # # filter out non-image files
     # images = list([os.path.join(root,x) for x in files if os.path.splitext(os.path.join(root,x))[1].lower() in extensions])

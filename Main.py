@@ -1,8 +1,9 @@
 import os
-import csv
-from os.path import join, getsize
+from os.path import getsize
 import math
 import operator
+import datetime
+import csv
 
 # # #
 # # Object to represent a directory and store all the status for that directory, namely:
@@ -57,7 +58,7 @@ import operator
 # Obtained from: https://stackoverflow.com/questions/5194057/better-way-to-convert-file-sizes-in-python
 #
 #
-def readable_size(size_bytes):
+def get_readable_size(size_bytes):
     size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
     if size_bytes == 0:
         return 0, size_name[0]
@@ -65,6 +66,7 @@ def readable_size(size_bytes):
     p = math.pow(1000, i)
     s = round(size_bytes / p, 2)
     return "%s %s" % (s, size_name[i])
+
 
 ##
 #   Walks the directory tree starting at 'dir'
@@ -125,22 +127,42 @@ def walk_folder(path):
         # else:
         #     percentage_of_images = 0
 
-        print("results: %s: %s" % (root, readable_size(my_size)))
+        # print("results: %s: %s" % (root, get_readable_size(my_size)))
     return dir_stats_dict
+
 
 ##
 #   Write the stats for the directory tree to CSV
 ##
-def write_stats_to_csv(record_dict, path):
-    print("got here")
+def write_stats_to_csv(directory_list, path):
+    file_name = "storage_stats_" + str(datetime.datetime.now().strftime("%Y%m%d%H%M%S")) + ".csv"
+    output_file = os.path.join(path, file_name)
+    fieldnames = ['path', 'size (bytes)', 'size (readable)', 'file_count', 'subdirectory_count', 'size_of_images', 'size_of_videos', 'size_of_other_files']
+
+    with open(output_file, "w") as csv_file:
+        writer = csv.writer(csv_file, delimiter=',')
+        writer.writerow(fieldnames)
+        for directory in directory_list:
+            # prepend the path
+            directory[1].insert(0, directory[0])
+            # add readable size to the array
+            readable_size = get_readable_size(directory[1][1])
+            directory[1].insert(2,readable_size)
+            writer.writerow(directory[1])
+            # writer.writerow([directory[0]] + directory[1])
 
 
 def main():
-    rootdir = "/Users/family/Pictures/2017/04 April/Wes"
-    # rootdir = "/Users/family/Movies/P90X"
+    rootdir = "/Users/family/Pictures"
+    output_path = "/Users/family/PycharmProjects/DiskUsageList/output"
     stats = walk_folder(rootdir)
+
+    # sort by keys (directory paths)
     sorted_stats = sorted(stats.items(), key=operator.itemgetter(0))
     print(sorted_stats)
+
+    # print the sorted stats to CSV
+    write_stats_to_csv(sorted_stats, output_path)
 
 
 if __name__ == "__main__":
